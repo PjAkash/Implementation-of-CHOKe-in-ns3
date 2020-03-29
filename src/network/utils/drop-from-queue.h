@@ -52,6 +52,7 @@ public:
   virtual Ptr<Item> Dequeue (void);
   virtual Ptr<Item> Remove (void);
   virtual Ptr<const Item> Peek (void) const;
+  Ptr<const Item> PeekAt (uint32_t);
   Ptr<Item> RemoveFrom (uint32_t);
   bool EnqueueAt (uint32_t,Ptr<Item> item);
 
@@ -62,6 +63,8 @@ private:
   using Queue<Item>::DoDequeue;
   using Queue<Item>::DoRemove;
   using Queue<Item>::DoPeek;
+
+  NS_LOG_TEMPLATE_DECLARE;     //!< redefinition of the log component
 };
 
 
@@ -83,22 +86,23 @@ DropFromQueue<Item>::GetTypeId (void)
 
 template <typename Item>
 DropFromQueue<Item>::DropFromQueue ()
-  : Queue<Item> ()
+  : Queue<Item> (),
+  NS_LOG_TEMPLATE_DEFINE ("DropFromQueue")
 {
-  QUEUE_LOG (LOG_LOGIC, "DropFromQueue(" << this << ")");
+  NS_LOG_FUNCTION (this);
 }
 
 template <typename Item>
 DropFromQueue<Item>::~DropFromQueue ()
 {
-  QUEUE_LOG (LOG_LOGIC, "~DropFromQueue(" << this << ")");
+  NS_LOG_FUNCTION (this);
 }
 
 template <typename Item>
 bool
 DropFromQueue<Item>::Enqueue (Ptr<Item> item)
 {
-  QUEUE_LOG (LOG_LOGIC, "DropFromQueue:Enqueue(" << this << ", " << item << ")");
+  NS_LOG_FUNCTION (this << item);
 
   return DoEnqueue (Tail (), item);
 }
@@ -107,11 +111,11 @@ template <typename Item>
 Ptr<Item>
 DropFromQueue<Item>::Dequeue (void)
 {
-  QUEUE_LOG (LOG_LOGIC, "DropFromQueue:Dequeue(" << this << ")");
+  NS_LOG_FUNCTION (this);
 
   Ptr<Item> item = DoDequeue (Head ());
 
-  QUEUE_LOG (LOG_LOGIC, "Popped " << item);
+  NS_LOG_LOGIC ("Popped " << item);
 
   return item;
 }
@@ -120,11 +124,11 @@ template <typename Item>
 Ptr<Item>
 DropFromQueue<Item>::Remove (void)
 {
-  QUEUE_LOG (LOG_LOGIC, "DropFromQueue:Remove(" << this << ")");
+  NS_LOG_FUNCTION (this);
 
   Ptr<Item> item = DoRemove (Head ());
 
-  QUEUE_LOG (LOG_LOGIC, "Removed " << item);
+  NS_LOG_LOGIC ("Removed " << item);
 
   return item;
 }
@@ -133,16 +137,29 @@ template <typename Item>
 Ptr<const Item>
 DropFromQueue<Item>::Peek (void) const
 {
-  QUEUE_LOG (LOG_LOGIC, "DropFromQueue:Peek(" << this << ")");
+  NS_LOG_FUNCTION (this);
 
   return DoPeek (Head ());
+}
+
+template <typename Item>
+Ptr<const Item>
+DropFromQueue<Item>::PeekAt (uint32_t pos)
+{
+  NS_LOG_FUNCTION (this);
+  auto ptr = Head ();
+  for (uint32_t i = 0; i < pos; i++)
+  {
+    ptr++;
+  }
+  return DoPeek (ptr);
 }
 
 template <typename Item>
 Ptr<Item>
 DropFromQueue<Item>::RemoveFrom (uint32_t pos)
 {
-  QUEUE_LOG (LOG_LOGIC, "DropFromQueue:RemoveFrom(" << this << ")");
+  NS_LOG_FUNCTION (this);
 
   auto ptr = Head ();
   for (uint32_t i = 0; i < pos; i++)
@@ -151,7 +168,7 @@ DropFromQueue<Item>::RemoveFrom (uint32_t pos)
     }
   Ptr<Item> item = DoDequeue (ptr);
 
-  QUEUE_LOG (LOG_LOGIC, "Removed " << item);
+  NS_LOG_LOGIC ( "Removed " << item);
 
   return item;
 }
@@ -163,7 +180,7 @@ template <typename Item>
 bool
 DropFromQueue<Item>::EnqueueAt (uint32_t pos,Ptr<Item> item)
 {
-  QUEUE_LOG (LOG_LOGIC, "DropFromQueue:EnqueueAt(" << this << ")");
+  NS_LOG_FUNCTION (this);
 
   auto ptr = Head ();
   for (uint32_t i = 1; i < pos; i++)

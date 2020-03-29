@@ -29,6 +29,8 @@
 #include "queue-disc.h"
 #include <ns3/drop-tail-queue.h>
 #include "ns3/net-device-queue-interface.h"
+#include "ns3/drop-from-queue.h"
+
 
 namespace ns3 {
 
