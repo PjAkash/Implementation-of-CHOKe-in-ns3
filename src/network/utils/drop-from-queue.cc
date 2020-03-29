@@ -20,6 +20,8 @@
 
 namespace ns3 {
 
+NS_LOG_COMPONENT_DEFINE("DropFromQueue");
+
 NS_OBJECT_TEMPLATE_CLASS_DEFINE (DropFromQueue,Packet);
 
 } // namespace ns3
