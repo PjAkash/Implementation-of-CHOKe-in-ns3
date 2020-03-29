@@ -221,14 +221,14 @@ ChokeQueueDisc::DoEnqueue (Ptr<QueueDiscItem> item)
       Ptr<Queue<QueueDiscItem> > queue =  GetInternalQueue (0);
       Ptr<DropFromQueue<QueueDiscItem> > q = queue->GetObject<DropFromQueue<QueueDiscItem> > ();
       Ptr<const QueueDiscItem> randomit = q->PeekAt (randompos);
-      QueueDiscItem * randomitem = const_cast<QueueDiscItem *> (GetPointer (randomit))
+      QueueDiscItem * randomitem = const_cast<QueueDiscItem *> (GetPointer (randomit));
 
       int32_t hash = Classify (item);
       int32_t hashrnd = Classify (randomitem);
       
       if (hash == hashrnd)
         {
-          DropBeforeEnqueue (item,CHOKE_MARK);
+          DropBeforeEnqueue (item, FORCED_MARK);
           q->RemoveFrom (randompos);
           return false;
         }

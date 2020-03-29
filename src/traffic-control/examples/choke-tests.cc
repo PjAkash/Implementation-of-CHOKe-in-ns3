@@ -5,7 +5,7 @@
 #include "ns3/point-to-point-module.h"
 #include "ns3/applications-module.h"
 #include "ns3/traffic-control-module.h"
-#include "ns3/point-to-point-dumbbell.h"
+#include "ns3/point-to-point-layout-module.h"
 
 using namespace ns3;
 
@@ -86,12 +86,12 @@ main (int argc, char *argv[])
     {
       NS_LOG_INFO ("Set CHOKE params");
       Config::SetDefault ("ns3::ChokeQueueDisc::Mode", StringValue ("QUEUE_DISC_MODE_PACKETS"));
-      Config::SetDefault ("ns3::ChokeQueueDisc::MeanPktSize", UintegerValue (1000));
+      Config::SetDefault ("ns3::ChokeQueueDisc::MeanPktSize", UintegerValue (500));
       Config::SetDefault ("ns3::ChokeQueueDisc::Wait", BooleanValue (true));
       Config::SetDefault ("ns3::ChokeQueueDisc::QW", DoubleValue (0.002));
-      Config::SetDefault ("ns3::ChokeQueueDisc::MinTh", DoubleValue (100));
-      Config::SetDefault ("ns3::ChokeQueueDisc::MaxTh", DoubleValue (200));
-      Config::SetDefault ("ns3::ChokeQueueDisc::QueueLimit", UintegerValue (300));
+      Config::SetDefault ("ns3::ChokeQueueDisc::MinTh", DoubleValue (5));
+      Config::SetDefault ("ns3::ChokeQueueDisc::MaxTh", DoubleValue (15));
+      Config::SetDefault ("ns3::ChokeQueueDisc::QueueLimit", UintegerValue (30));
       uint16_t chokehandle = tch.SetRootQueueDisc ("ns3::ChokeQueueDisc", "LinkBandwidth", StringValue ("1Mbps"), "LinkDelay", StringValue    							  ("1ms"));
       tch.AddPacketFilter (chokehandle,"ns3::FqCoDelIpv4PacketFilter");
     }
